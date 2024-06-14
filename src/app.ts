@@ -31,7 +31,8 @@ connectToMongoDB();
 
 // Register endpoint
 app.post('/register/start', async (req: Request, res: Response) => {
-    const username = req.body.usrname;
+
+    const username = req.body.username;
     if (!username) {
         return res.status(400).json({ message: 'Username is required' });
     }
