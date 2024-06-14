@@ -9,7 +9,7 @@ import {
 import { createUser, findUserByUsername, findUserByUserId, getUserObjectResponse, } from './utility/userManagers';
 import { addChallenge, isChallengeValid, addPassKey, findPassKey, allPassKeys, deleteChallenge, updatePassKey } from './utility/challegeManager';
 import { connectToMongoDB } from './utility/db';
-import bodyParser from 'body-parser';
+
 
 
 
@@ -220,6 +220,12 @@ app.get('/me', verifyToken, async (req: Request, res: Response) => {
 
 app.get('/', (req: Request, res: Response) => {
     res.send('Hello World!');
+});
+app.get('/secrets', (req: Request, res: Response) => {
+    res.json({
+        'JWT_SECRET': process.env.JWT_SECRET,
+        'MONGODB_URI': process.env.MONGODB_URI
+    });
 });
 app.listen(port, () => {
     console.log(`Express is listening at http://localhost:${port}`);
