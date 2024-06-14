@@ -6,10 +6,20 @@
     "moduleResolution": "node",
     "sourceMap": true,
     "outDir": "dist",
+    "baseUrl": ".",
+    "paths": {
+      "*": [
+        "node_modules/*",
+        "src/types/*"
+      ]
+    },
     "types": [
       "node"
     ]
   },
+  "include": [
+    "./src/**/*"
+  ],
   "lib": [
     "es2015"
   ],

@@ -10,7 +10,7 @@ import { createUser, findUserByUsername, findUserByUserId, getUserObjectResponse
 import { addChallenge, isChallengeValid, addPassKey, findPassKey, allPassKeys, deleteChallenge, updatePassKey } from './utility/challegeManager';
 import { connectToMongoDB } from './utility/db';
 
-import dotenv from 'dotenv';
+
 
 
 import { v4 as uuidv4 } from 'uuid';
@@ -23,7 +23,8 @@ const origin = [
 
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 8080
+
 
 
 app.use(express.json());
@@ -225,4 +226,6 @@ app.listen(port, () => {
     console.log(`Express is listening at http://localhost:${port}`);
 });
 
+
+export default app
 
