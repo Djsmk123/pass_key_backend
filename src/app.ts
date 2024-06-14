@@ -9,6 +9,7 @@ import {
 import { createUser, findUserByUsername, findUserByUserId, getUserObjectResponse, } from './utility/userManagers';
 import { addChallenge, isChallengeValid, addPassKey, findPassKey, allPassKeys, deleteChallenge, updatePassKey } from './utility/challegeManager';
 import { connectToMongoDB } from './utility/db';
+import bodyParser from 'body-parser';
 
 
 
@@ -24,16 +25,13 @@ const origin = [
 
 const app = express();
 const port = process.env.PORT || 8080
-
-
-
 app.use(express.json());
 
 connectToMongoDB();
 
 // Register endpoint
 app.post('/register/start', async (req: Request, res: Response) => {
-    const { username }: { username: string } = req.body;
+    const username = req.body.usrname;
     if (!username) {
         return res.status(400).json({ message: 'Username is required' });
     }
@@ -42,7 +40,6 @@ app.post('/register/start', async (req: Request, res: Response) => {
     if (await findUserByUsername(username)) {
         return res.status(400).json({ message: 'User already exists' });
     }
-    var passkeys = await allPassKeys();
 
     const options = await generateRegistrationOptions({
         rpName: 'CredMan App Test',
@@ -77,11 +74,13 @@ app.post('/register/complete', async (req: Request, res: Response) => {
     if (!req.body.username) {
         return res.status(400).json({ message: 'username is required' });
     }
+
     //check if user already exists
     let user = await findUserByUsername(req.body.username);
     if (user) {
         return res.status(400).json({ message: 'User already exists' });
     }
+
 
     try {
         const verification = await verifyRegistrationResponse({
