@@ -116,18 +116,22 @@ app.post('/register/complete', async (req: Request, res: Response) => {
 
 //login start endpoint
 app.get('/login/start', async (req: Request, res: Response) => {
-    var passkeys = await allPassKeys();
-    var options = await generateAuthenticationOptions({
-        rpID: rpID,
-        allowCredentials:
-            passkeys.map((passkey) => ({
-                type: 'public-key',
-                id: passkey.credentialID,
-                transports: ['internal'],
-            })),
-    });
-    await addChallenge(options.challenge);
-    return res.json(options);
+    try {
+        var passkeys = await allPassKeys();
+        var options = await generateAuthenticationOptions({
+            rpID: rpID,
+            allowCredentials:
+                passkeys.map((passkey) => ({
+                    type: 'public-key',
+                    id: passkey.credentialID,
+                    transports: ['internal'],
+                })),
+        });
+        await addChallenge(options.challenge);
+        return res.json(options);
+    } catch (e) {
+        return res.status(400).json({ message: 'Error', error: e.toString() });
+    }
 });
 
 

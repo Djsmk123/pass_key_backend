@@ -23,7 +23,7 @@ export const addChallenge = async (challenge: string): Promise<void> => {
         await collection.insertOne({ value: challenge });
         console.log('Challenge added to MongoDB');
     } catch (error) {
-        console.error('Error adding challenge to MongoDB:', error);
+        throw new Error(error);
     }
 };
 
