@@ -6,9 +6,10 @@ import {
     verifyRegistrationResponse,
     verifyAuthenticationResponse
 } from '@simplewebauthn/server';
-import { createUser, findUserByUsername, findUserByUserId, getUserObjectResponse, } from './utility/userManagers';
-import { addChallenge, isChallengeValid, addPassKey, findPassKey, allPassKeys, deleteChallenge, updatePassKey } from './utility/challegeManager';
-import { connectToMongoDB } from './utility/db';
+import { createUser, findUserByUsername, findUserByUserId, getUserObjectResponse, } from './utils/userManagers';
+import { addChallenge, isChallengeValid, deleteChallenge, } from './utils/challegeManager';
+import { connectToMongoDB } from './utils/db';
+import { addPassKey, findPassKey, allPassKeys, updatePassKey } from "./utils/passkey";
 
 
 
@@ -226,14 +227,10 @@ app.get('/me', verifyToken, async (req: Request, res: Response) => {
 app.get('/', (req: Request, res: Response) => {
     res.send('Hello World!');
 });
-app.get('/secrets', (req: Request, res: Response) => {
-    res.json({
-        'JWT_SECRET': process.env.JWT_SECRET,
-        'MONGODB_URI': process.env.MONGODB_URI
-    });
-});
+
+const localIp = process.env.LOCAL_IP || 'localhost';
 app.listen(port, () => {
-    console.log(`Express is listening at http://localhost:${port}`);
+    console.log(`Express is listening at http://${localIp}:${port}`);
 });
 
 

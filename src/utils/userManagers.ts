@@ -50,17 +50,7 @@ export async function findUserByUserId(userId: string): Promise<User> {
         throw err;
     }
 }
-export async function findByCredentialId(passKeyId: string): Promise<User> {
-    try {
-        const user = await getDb().collection('users').findOne({ passKeyId: passKeyId }) as unknown as User | null;
-        //remove mongodb _id from user object
-        return user;
-    }
-    catch (err) {
-        console.error('Error finding user by userId:', err);
-        throw err;
-    }
-}
+
 
 export function getUserObjectResponse(user): User {
     return {
