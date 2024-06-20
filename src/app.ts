@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import { verifyToken, generateToken } from './api/middleware';
 import {
     generateRegistrationOptions,
@@ -8,8 +8,9 @@ import {
 } from '@simplewebauthn/server';
 import { createUser, findUserByUsername, findUserByUserId, getUserObjectResponse, } from './utils/userManagers';
 import { addChallenge, isChallengeValid, deleteChallenge, } from './utils/challegeManager';
-import { connectToMongoDB } from './utils/db';
+import { connectToMongoDB, isConnect } from './utils/db';
 import { addPassKey, findPassKey, allPassKeys, updatePassKey } from "./utils/passkey";
+import bodyParser from 'body-parser';
 
 
 
@@ -26,9 +27,24 @@ const origin = [
 
 const app = express();
 const port = process.env.PORT || 8080
-app.use(express.json());
+app.use(
+    bodyParser.urlencoded({
+        extended: true,
+    })
+);
 
 connectToMongoDB();
+// Middleware to check MongoDB connection
+const checkMongoConnection = async (req: Request, res: Response, next: NextFunction) => {
+    if (!isConnect()) {
+        console.log('MongoDB connection lost, attempting to reconnect...');
+        await connectToMongoDB();
+    }
+    next();
+};
+
+// Apply the middleware to all routes
+app.use(checkMongoConnection);
 
 // Register endpoint
 app.post('/register/start', async (req: Request, res: Response) => {

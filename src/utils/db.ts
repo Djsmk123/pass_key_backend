@@ -6,7 +6,7 @@ dotenv.config();
 let db: Db;
 const mongoURI = process.env.MONGODB_URI;
 const dbName = "passkey";
-console.log(mongoURI);
+
 
 // Initialize MongoDB connection
 export async function connectToMongoDB() {
@@ -21,9 +21,12 @@ export async function connectToMongoDB() {
         console.error('Error connecting to MongoDB:', err);
     }
 }
-
+export function isConnect() {
+    return db !== undefined;
+}
 
 export function getDb() {
     return db;
 }
+
 

@@ -57,7 +57,7 @@ The server will start running at `http://localhost:8080` by default.
     "challenge": "<base64-encoded-challenge>",
     "rp": {
       "name": "CredMan App Test",
-      "id": "blogs-deeplink-example.vercel.app"
+      "id": "<rpId>"
     },
     "user": {
       "name": "user123",
